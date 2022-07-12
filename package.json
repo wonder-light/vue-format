@@ -1,0 +1,206 @@
+{
+    "name": "vue-format",
+    "displayName": "Vue-format",
+    "description": "vue文件的格式化扩展",
+    "version": "0.0.1",
+    "publisher": "nianian",
+    "keywords": ["vue", "format", "js-beautify"],
+    "engines": {
+        "vscode": "^1.69.0"
+    },
+    "icon": "./images/logo.png",
+    "categories": [
+        "Formatters"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wonder-light/vue-format"
+    },
+    "activationEvents": [
+        "onLanguage:vue"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "vue-format",
+            "properties": {
+                "vue-format.javascript.disabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "禁用 vue-format.javascript"
+                },
+                "vue-format.javascript.eol": {
+                    "type": "string",
+                    "default": "auto",
+                    "enum": [
+                        "\n",
+                        "\r\n",
+                        "auto"
+                    ],
+                    "description": "默认行尾字符"
+                },
+                "vue-format.javascript": {
+                    "type": "object",
+                    "description": "javascript的格式化配置 (详情查看js-beautify)",
+                    "default": {
+                        "indent_size": "4",
+                        "indent_char": " ",
+                        "preserve_newlines": true,
+                        "max_preserve_newlines": "2",
+                        "keep_array_indentation": true,
+                        "break_chained_methods": false,
+                        "indent_scripts": "separate",
+                        "brace_style": "none",
+                        "space_before_conditional": true,
+                        "unescape_strings": true,
+                        "jslint_happy": true,
+                        "end_with_newline": false,
+                        "wrap_line_length": "160",
+                        "indent_inner_html": false,
+                        "comma_first": false,
+                        "e4x": true,
+                        "indent_empty_lines": true
+                    }
+                },
+                "vue-format.html.disabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "禁用 vue-format.html"
+                },
+                "vue-format.html.eol": {
+                    "type": "string",
+                    "default": "auto",
+                    "enum": [
+                        "\n",
+                        "\r\n",
+                        "auto"
+                    ],
+                    "description": "默认行尾字符"
+                },
+                "vue-format.html.wrap_attributes": {
+                    "type": "string",
+                    "default": "auto",
+                    "enum": [
+                        "auto",
+                        "force",
+                        "force-aligned",
+                        "force-expand-multiline",
+                        "aligned-multiple",
+                        "preserve",
+                        "preserve-aligned"
+                    ],
+                    "description": "包装属性"
+                },
+                "vue-format.html": {
+                    "type": "object",
+                    "description": "html的格式化配置 (详情查看js-beautify)",
+                    "default": {
+                        "disabled": false,
+                        "indent_size": "2",
+                        "indent_char": " ",
+                        "preserve_newlines": true,
+                        "max_preserve_newlines": "2",
+                        "wrap_line_length": "160",
+                        "indent_scripts": "separate",
+                        "indent_empty_lines": true,
+                        "brace_style": "none",
+                        "indent_inner_html": false,
+                        "indent_handlebars": false,
+                        "end_with_newline": false
+                    }
+                },
+                "vue-format.css.disabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "禁用 vue-format.css"
+                },
+                "vue-format.css.eol": {
+                    "type": "string",
+                    "default": "auto",
+                    "enum": [
+                        "\n",
+                        "\r\n",
+                        "auto"
+                    ],
+                    "description": "默认行尾字符"
+                },
+                "vue-format.css": {
+                    "type": "object",
+                    "description": "css的格式化配置 (详情查看js-beautify)",
+                    "default": {
+                        "disabled": false,
+                        "indent_size": "2",
+                        "indent_char": " ",
+                        "preserve_newlines": true,
+                        "max_preserve_newlines": "2",
+                        "wrap_line_length": "160",
+                        "indent_scripts": "separate",
+                        "indent_empty_lines": true,
+                        "brace_style": "none",
+                        "indent_inner_html": false,
+                        "end_with_newline": false,
+                        "selector_separator_newline": false,
+                        "newline_between_rules": false,
+                        "space_around_selector_separator": true,
+                        "space_around_combinator": true
+                    }
+                }
+            }
+        },
+        "commands": [
+            {
+                "when": "editorLangId == vue",
+                "command": "extension.vueFormat",
+                "title": "格式化vue"
+            }
+        ],
+        "keybindings": [
+            {
+                "key": "ctrl+alt+p",
+                "mac": "cmd+ctrl+p",
+                "when": "editorTextFocus && !editorReadonly && editorLangId == vue",
+                "command": "extension.vueFormat"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "editorLangId == vue",
+                    "command": "extension.vueFormat",
+                    "group": "navigation"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run build",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js",
+        "build": "rollup -c --environment NODE_ENV:development"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^22.0.1",
+        "@rollup/plugin-node-resolve": "^13.3.0",
+        "@types/glob": "^7.2.0",
+        "@types/js-beautify": "^1.13.3",
+        "@types/mocha": "^9.1.1",
+        "@types/node": "16.x",
+        "@types/vscode": "^1.69.0",
+        "@typescript-eslint/eslint-plugin": "^5.30.0",
+        "@typescript-eslint/parser": "^5.30.0",
+        "@vscode/test-electron": "^2.1.5",
+        "eslint": "^8.18.0",
+        "glob": "^8.0.3",
+        "mocha": "^10.0.0",
+        "rollup": "^2.76.0",
+        "rollup-plugin-typescript2": "^0.32.1",
+        "typescript": "^4.7.4"
+    },
+    "dependencies": {
+        "js-beautify": "^1.14.4"
+    }
+}

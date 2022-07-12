@@ -1,4 +1,4 @@
-import { JSBeautifyOptions, js_beautify } from 'js-beautify';
+import { js_beautify } from 'js-beautify';
 import { EndOfLine, Range, TextDocument, TextEdit, workspace } from 'vscode';
 import { LanguageId, LanguageMode } from './../languageMode';
 
@@ -25,7 +25,7 @@ export class JSLanguageMode implements LanguageMode {
         //if(value) return value;
 
         /** vue-format.javascript配置 */
-        let config = workspace.getConfiguration("vue-format").get<JSBeautifyOptions>("javascript");
+        let config = workspace.getConfiguration("vue-format").get<any>("javascript");
 
         //未启用
         if (!config || config.disabled) {
@@ -38,7 +38,7 @@ export class JSLanguageMode implements LanguageMode {
         }
 
         /** 格式化后的文本 */
-        let format: string = js_beautify(jsText, config);
+        let format: string = js_beautify(jsText, config.format);
         //添加更改
         edits.push(TextEdit.replace(range, format));
 

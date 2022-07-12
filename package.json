@@ -4,7 +4,11 @@
     "description": "vue文件的格式化扩展",
     "version": "0.0.1",
     "publisher": "nianian",
-    "keywords": ["vue", "format", "js-beautify"],
+    "keywords": [
+        "vue",
+        "format",
+        "js-beautify"
+    ],
     "engines": {
         "vscode": "^1.69.0"
     },
@@ -22,7 +26,6 @@
     "main": "./out/extension.js",
     "contributes": {
         "configuration": {
-            "type": "object",
             "title": "vue-format",
             "properties": {
                 "vue-format.javascript.disabled": {
@@ -40,7 +43,7 @@
                     ],
                     "description": "默认行尾字符"
                 },
-                "vue-format.javascript": {
+                "vue-format.javascript.format": {
                     "type": "object",
                     "description": "javascript的格式化配置 (详情查看js-beautify)",
                     "default": {
@@ -92,11 +95,10 @@
                     ],
                     "description": "包装属性"
                 },
-                "vue-format.html": {
+                "vue-format.html.format": {
                     "type": "object",
                     "description": "html的格式化配置 (详情查看js-beautify)",
                     "default": {
-                        "disabled": false,
                         "indent_size": "2",
                         "indent_char": " ",
                         "preserve_newlines": true,
@@ -125,12 +127,11 @@
                     ],
                     "description": "默认行尾字符"
                 },
-                "vue-format.css": {
+                "vue-format.css.format": {
                     "type": "object",
                     "description": "css的格式化配置 (详情查看js-beautify)",
                     "default": {
-                        "disabled": false,
-                        "indent_size": "2",
+                        "indent_size": "4",
                         "indent_char": " ",
                         "preserve_newlines": true,
                         "max_preserve_newlines": "2",

@@ -1,4 +1,4 @@
-import { CSSBeautifyOptions, css_beautify } from 'js-beautify';
+import { css_beautify } from 'js-beautify';
 import { EndOfLine, Range, TextDocument, TextEdit, workspace } from 'vscode';
 import { LanguageId, LanguageMode } from '../languageMode';
 
@@ -25,7 +25,7 @@ export class CSSLanguageMode implements LanguageMode {
         //if(value) return value;
 
         /** vue-format.css配置 */
-        let config = workspace.getConfiguration("vue-format").get<CSSBeautifyOptions>("css");
+        let config = workspace.getConfiguration("vue-format").get<any>("css");
 
         //未启用
         if (!config || config.disabled) {
@@ -38,7 +38,7 @@ export class CSSLanguageMode implements LanguageMode {
         }
 
         /** 格式化后的文本 */
-        let format: string = css_beautify(cssText, config);
+        let format: string = css_beautify(cssText, config.format);
         //添加更改
         edits.push(TextEdit.replace(range, format));
 

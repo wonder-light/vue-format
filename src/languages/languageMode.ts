@@ -1,4 +1,5 @@
-import { EndOfLine, Range, TextDocument, TextEdit, workspace } from "vscode";
+import { EndOfLine, TextDocument, TextEdit, workspace } from "vscode";
+import { configurePrefix, getRange, getRangeText } from "../api";
 
 
 /** 语言类型 */
@@ -23,11 +24,10 @@ export class LanguageMode {
     }
     /** 需要匹配模板 */
     matchTemplate: RegExp | undefined = undefined;
-
+    /** 偏移的行 */
+    offsetLine: number = 0;
     /** 语言Id */
     languageId: LanguageId = 'vue';
-    /** 配置前缀 */
-    configurePrefix: string = 'vue-format';
     /**
      * 格式化文档
      * @param {TextDocument} document 需要格式化的文档
@@ -36,35 +36,19 @@ export class LanguageMode {
     async format(document: TextDocument): Promise<TextEdit[]> {
         //文档的更改
         const edits: TextEdit[] = [];
-        /** 文档文本 */
-        let text = document.getText();
         const config = this.getFormattingConfig(document);
 
-        /** 获取对应范围内的变化 */
-        const getRangeChange = async (start: number, end: number, text: string) => {
-            const range = new Range(document.positionAt(start), document.positionAt(end));
-            const format = await this.formatText(text, config);
-            return TextEdit.replace(range, format);
-        };
+        if (!config) {
+            return [];
+        }
 
         //分段匹配
         if (this.matchTemplate) {
-            let result = text.match(this.matchTemplate);
-            if (!result || result.length <= 0) {
-                return [];
-            }
-            for (const match of result) {
-                //获取第一次匹配的索引位置
-                let start = text.indexOf(match);
-                if (start === -1) {
-                    continue;
-                }
-                edits.push(await getRangeChange(start, start + match.length, match));
-            }
+            edits.push(...(await this.formatRange(document, config)));
         }
         else {
             /** 整个文档范围 */
-            edits.push(await getRangeChange(0, text.length, text));
+            edits.push(await this.formatDocument(document, config));
         }
 
         return edits;
@@ -75,8 +59,53 @@ export class LanguageMode {
      * @param {string} matchText 需要格式化的文本
      * @return {string3} 格式化后的文本
      */
-    async formatText(matchText: string, formatConfig: any): Promise<string> {
+    protected async formatText(matchText: string, formatConfig: any): Promise<string> {
         return matchText;
+    }
+
+    /**
+     * 格式化文档
+     * @param {TextDocument} document 指定的文档
+     * @param {any} formatConfig 格式化配置
+     */
+    protected async formatDocument(document: TextDocument, formatConfig: any): Promise<TextEdit> {
+        let text = document.getText();
+        let end = text.length;
+        text = await this.formatText(text, formatConfig);
+        return TextEdit.replace(getRange(document, 0, end), text);
+    }
+
+    /**
+     * 格式化指定的范围
+     * @param {TextDocument} document 指定的文档
+     * @param {any} formatConfig 格式化配置
+     * @return {}
+     */
+    protected async formatRange(document: TextDocument, formatConfig: any): Promise<TextEdit[]> {
+        const edits: TextEdit[] = [];
+        if (!this.matchTemplate) {
+            return edits;
+        }
+        let doc = document.getText();
+        //匹配的结果
+        let result = doc.match(this.matchTemplate);
+        if (!result || result.length <= 0) {
+            return edits;
+        }
+
+
+        for (const match of result) {
+            //获取第一次匹配的索引位置
+            let start = doc.indexOf(match);
+            if (start === -1) {
+                continue;
+            }
+            const { range, text } = getRangeText(document, start, start + match.length, this.offsetLine);
+            const format = await this.formatText(text, formatConfig);
+            edits.push(TextEdit.replace(range, format));
+        }
+
+        return edits;
     }
 
     /**
@@ -84,7 +113,9 @@ export class LanguageMode {
      */
     getFormattingConfig(document: TextDocument): any {
         /** vue-format.javascript配置 */
-        let config = workspace.getConfiguration(this.configurePrefix).get<any>(this.languageId);
+        let config = workspace.getConfiguration(configurePrefix).get<any>(this.languageId);
+
+        config = Object.assign({}, config);
 
         //未启用
         if (!config || config.disabled) {
@@ -96,7 +127,7 @@ export class LanguageMode {
             config.eol = document.eol === EndOfLine.CRLF ? "\r\n" : "\n";
         }
 
-        return config.format;
+        return config;
     }
 }
 

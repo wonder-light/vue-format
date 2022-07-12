@@ -1,9 +1,6 @@
 # Change Log
 
-All notable changes to the "vue-format" extension will be documented in this file.
+#### 0.1.0 Released
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+#### 0.2.0
+支持 html、css、Js 文件格式化

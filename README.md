@@ -20,29 +20,6 @@
 
 ```json
 {
-    "vue-format.javascript.disabled": false,    //"禁用 vue-format.javascript"
-    "vue-format.javascript.eol": "auto",    //"默认行尾字符"
-    "vue-format.javascript.format": {  //javascript的格式化配置 (详情查看js-beautify)
-        "indent_size": "4",
-        "indent_char": " ",
-        "preserve_newlines": true,
-        "max_preserve_newlines": "2",
-        "keep_array_indentation": true,
-        "break_chained_methods": false,
-        "indent_scripts": "separate",
-        "brace_style": "none",
-        "space_before_conditional": true,
-        "unescape_strings": true,
-        "jslint_happy": true,
-        "end_with_newline": false,
-        "wrap_line_length": "160",
-        "indent_inner_html": false,
-        "comma_first": false,
-        "e4x": true,
-        "indent_empty_lines": true
-    },
-
-
     "vue-format.html.disabled": false,    //"禁用 vue-format.html"
     "vue-format.html.eol": "auto",    //"默认行尾字符"
     "vue-format.html.wrap_attributes": "auto",
@@ -57,7 +34,8 @@
         "brace_style": "none",
         "indent_inner_html": false,
         "indent_handlebars": false,
-        "end_with_newline": false
+        "end_with_newline": false,
+        "extra_liners": []
     },
 
 
@@ -80,6 +58,56 @@
         "newline_between_rules": false,
         "space_around_selector_separator": true,
         "space_around_combinator": true
+    },
+
+
+
+    "vue-format.javascript.disabled": false,    //"禁用 vue-format.javascript"
+    "vue-format.javascript.eol": "auto",    //"默认行尾字符"
+    "vue-format.javascript.format": {  //javascript的格式化配置 (详情查看js-beautify)
+        "indent_size": "4",
+        "indent_char": " ",
+        "preserve_newlines": true,
+        "max_preserve_newlines": "2",
+        "keep_array_indentation": true,
+        "break_chained_methods": false,
+        "indent_scripts": "separate",
+        "brace_style": "none",
+        "space_before_conditional": true,
+        "unescape_strings": true,
+        "jslint_happy": true,
+        "end_with_newline": false,
+        "wrap_line_length": "160",
+        "indent_inner_html": false,
+        "comma_first": false,
+        "e4x": true,
+        "indent_empty_lines": true,
+        "operator_position": "after-newline"
+    },
+    
+    
+    
+    "vue-format.typescript.disabled": false,    //"禁用 vue-format.javascript"
+    "vue-format.typescript.eol": "auto",    //"默认行尾字符"
+    "vue-format.typescript.format": {  //typescript的格式化配置 (详情查看js-beautify)
+        "indent_size": "4",
+        "indent_char": " ",
+        "preserve_newlines": true,
+        "max_preserve_newlines": "2",
+        "keep_array_indentation": true,
+        "break_chained_methods": false,
+        "indent_scripts": "separate",
+        "brace_style": "none",
+        "space_before_conditional": true,
+        "unescape_strings": true,
+        "jslint_happy": true,
+        "end_with_newline": false,
+        "wrap_line_length": "160",
+        "indent_inner_html": false,
+        "comma_first": false,
+        "e4x": true,
+        "indent_empty_lines": true,
+        "operator_position": "after-newline"
     },
 }
 

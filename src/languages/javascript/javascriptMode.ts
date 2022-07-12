@@ -5,6 +5,9 @@ import { LanguageId, LanguageMode } from './../languageMode';
 export class JSLanguageMode extends LanguageMode {
     constructor(template: RegExp | undefined = undefined) {
         super(template);
+        if(template !== undefined){
+            this.offsetLine = 1;
+        }
     }
     override languageId: LanguageId = 'javascript';
 

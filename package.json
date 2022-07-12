@@ -2,7 +2,7 @@
     "name": "vue-format",
     "displayName": "Vue-format",
     "description": "vue文件的格式化扩展",
-    "version": "0.0.1",
+    "version": "0.2.0",
     "publisher": "nianian",
     "keywords": [
         "vue",
@@ -21,134 +21,571 @@
         "url": "https://github.com/wonder-light/vue-format"
     },
     "activationEvents": [
-        "onLanguage:vue"
+        "onLanguage:vue",
+        "onLanguage:html",
+        "onLanguage:css",
+        "onLanguage:javascript",
+        "onLanguage:typescript"
     ],
-    "main": "./dist/extension.js",
+    "main": "./out/extension.js",
     "contributes": {
-        "configuration": {
-            "title": "vue-format",
-            "properties": {
-                "vue-format.javascript.disabled": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "禁用 vue-format.javascript"
-                },
-                "vue-format.javascript.eol": {
-                    "type": "string",
-                    "default": "auto",
-                    "enum": [
-                        "\n",
-                        "\r\n",
-                        "auto"
-                    ],
-                    "description": "默认行尾字符"
-                },
-                "vue-format.javascript.format": {
-                    "type": "object",
-                    "description": "javascript的格式化配置 (详情查看js-beautify)",
-                    "default": {
-                        "indent_size": "4",
-                        "indent_char": " ",
-                        "preserve_newlines": true,
-                        "max_preserve_newlines": "2",
-                        "keep_array_indentation": true,
-                        "break_chained_methods": false,
-                        "indent_scripts": "separate",
-                        "brace_style": "none",
-                        "space_before_conditional": true,
-                        "unescape_strings": true,
-                        "jslint_happy": true,
-                        "end_with_newline": false,
-                        "wrap_line_length": "160",
-                        "indent_inner_html": false,
-                        "comma_first": false,
-                        "e4x": true,
-                        "indent_empty_lines": true
+        "configuration": [
+            {
+                "title": "常规",
+                "order": 1,
+                "type": "object",
+                "properties": {
+                    "vue-format.enable": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "启用 vue-format 扩展"
                     }
-                },
-                "vue-format.html.disabled": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "禁用 vue-format.html"
-                },
-                "vue-format.html.eol": {
-                    "type": "string",
-                    "default": "auto",
-                    "enum": [
-                        "\n",
-                        "\r\n",
-                        "auto"
-                    ],
-                    "description": "默认行尾字符"
-                },
-                "vue-format.html.wrap_attributes": {
-                    "type": "string",
-                    "default": "auto",
-                    "enum": [
-                        "auto",
-                        "force",
-                        "force-aligned",
-                        "force-expand-multiline",
-                        "aligned-multiple",
-                        "preserve",
-                        "preserve-aligned"
-                    ],
-                    "description": "包装属性"
-                },
-                "vue-format.html.format": {
-                    "type": "object",
-                    "description": "html的格式化配置 (详情查看js-beautify)",
-                    "default": {
-                        "indent_size": "2",
-                        "indent_char": " ",
-                        "preserve_newlines": true,
-                        "max_preserve_newlines": "2",
-                        "wrap_line_length": "160",
-                        "indent_scripts": "separate",
-                        "indent_empty_lines": true,
-                        "brace_style": "none",
-                        "indent_inner_html": false,
-                        "indent_handlebars": false,
-                        "end_with_newline": false
+                }
+            },
+            {
+                "title": "html",
+                "order": 2,
+                "type": "object",
+                "properties": {
+                    "vue-format.html.disabled": {
+                        "order": 1,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "禁用 vue-format html"
+                    },
+                    "vue-format.html.indent_size": {
+                        "order": 2,
+                        "type": "number",
+                        "default": 2,
+                        "description": "缩进大小"
+                    },
+                    "vue-format.html.indent_char": {
+                        "order": 3,
+                        "type": "string",
+                        "default": " ",
+                        "description": "缩进字符"
+                    },
+                    "vue-format.html.indent_level": {
+                        "order": 4,
+                        "type": "number",
+                        "default": 0,
+                        "description": "缩进等级"
+                    },
+                    "vue-format.html.eol": {
+                        "order": 5,
+                        "type": "string",
+                        "default": "auto",
+                        "enum": [ "\n", "\r\n", "auto" ],
+                        "description": "默认行尾字符"
+                    },
+                    "vue-format.html.end_with_newline": {
+                        "order": 6,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "末尾插入新行"
+                    },
+                    "vue-format.html.preserve_newlines": {
+                        "order": 7,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "保存新行, 保存行距"
+                    },
+                    "vue-format.html.max_preserve_newlines": {
+                        "order": 8,
+                        "type": "number",
+                        "default": 4,
+                        "description": "保存2个行距"
+                    },
+                    "vue-format.html.indent_with_tabs": {
+                        "order": 9,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "缩进时使用制表符"
+                    },
+                    "vue-format.html.wrap_line_length": {
+                        "order": 10,
+                        "type": "number",
+                        "default": 160,
+                        "description": "换行线长度"
+                    },
+                    "vue-format.html.indent_empty_lines": {
+                        "order": 11,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "保持空行的缩进"
+                    },
+                    "vue-format.html.indent_inner_html": {
+                        "order": 12,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "缩进 <html></html> 里的内容"
+                    },
+                    "vue-format.html.indent_head_inner_html": {
+                        "order": 13,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "缩进 <head></head> 里的内容"
+                    },
+                    "vue-format.html.indent_body_inner_html": {
+                        "order": 14,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "缩进 <body></body> 里的内容"
+                    },
+                    "vue-format.html.indent_handlebars": {
+                        "order": 15,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "缩进车把"
+                    },
+                    "vue-format.html.wrap_attributes": {
+                        "order": 16,
+                        "type": "string",
+                        "default": "auto",
+                        "enum": [ "auto", "force", "force-aligned", "force-expand-multiline", "aligned-multiple", "preserve", "preserve-aligned" ],
+                        "description": "包装属性"
+                    },
+                    "vue-format.html.wrap_attributes_indent_size": {
+                        "order": 17,
+                        "type": [ "number", "null" ],
+                        "default": null,
+                        "description": "换行属性缩进大小"
+                    },
+                    "vue-format.html.extra_liners": {
+                        "order": 18,
+                        "type": "array",
+                        "items": { "type": "string" },
+                        "default": [ ],
+                        "description": "以逗号分隔的标记列表，其中的标记之前将有额外新行。若为 null,默认包含 head, body, /html"
+                    },
+                    "vue-format.html.indent_scripts": {
+                        "order": 19,
+                        "type": "string",
+                        "default": "separate",
+                        "enum": [ "normal", "keep", "separate" ],
+                        "description": "缩进脚本"
                     }
-                },
-                "vue-format.css.disabled": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "禁用 vue-format.css"
-                },
-                "vue-format.css.eol": {
-                    "type": "string",
-                    "default": "auto",
-                    "enum": [
-                        "\n",
-                        "\r\n",
-                        "auto"
-                    ],
-                    "description": "默认行尾字符"
-                },
-                "vue-format.css.format": {
-                    "type": "object",
-                    "description": "css的格式化配置 (详情查看js-beautify)",
-                    "default": {
-                        "indent_size": "4",
-                        "indent_char": " ",
-                        "preserve_newlines": true,
-                        "max_preserve_newlines": "2",
-                        "wrap_line_length": "160",
-                        "indent_scripts": "separate",
-                        "indent_empty_lines": true,
-                        "brace_style": "none",
-                        "indent_inner_html": false,
-                        "end_with_newline": false,
-                        "selector_separator_newline": false,
-                        "newline_between_rules": false,
-                        "space_around_selector_separator": true,
-                        "space_around_combinator": true
+                }
+            },
+            {
+                "title": "css",
+                "order": 3,
+                "type": "object",
+                "properties": {
+                    "vue-format.css.disabled": {
+                        "order": 1,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "禁用 vue-format css"
+                    },
+                    "vue-format.css.indent_size": {
+                        "order": 2,
+                        "type": "number",
+                        "default": 4,
+                        "description": "缩进大小"
+                    },
+                    "vue-format.css.indent_char": {
+                        "order": 3,
+                        "type": "string",
+                        "default": " ",
+                        "description": "缩进字符"
+                    },
+                    "vue-format.css.indent_level": {
+                        "order": 4,
+                        "type": "number",
+                        "default": 0,
+                        "description": "缩进等级"
+                    },
+                    "vue-format.css.eol": {
+                        "order": 5,
+                        "type": "string",
+                        "default": "auto",
+                        "enum": [ "\n", "\r\n", "auto" ],
+                        "description": "默认行尾字符"
+                    },
+                    "vue-format.css.end_with_newline": {
+                        "order": 6,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "末尾插入新行"
+                    },
+                    "vue-format.css.preserve_newlines": {
+                        "order": 7,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "保存新行, 保存行距"
+                    },
+                    "vue-format.css.max_preserve_newlines": {
+                        "order": 8,
+                        "type": "number",
+                        "default": 4,
+                        "description": "保存2个行距"
+                    },
+                    "vue-format.css.indent_with_tabs": {
+                        "order": 9,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "缩进时使用制表符"
+                    },
+                    "vue-format.css.wrap_line_length": {
+                        "order": 10,
+                        "type": "number",
+                        "default": 160,
+                        "description": "换行线长度"
+                    },
+                    "vue-format.css.indent_empty_lines": {
+                        "order": 11,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "保持空行的缩进"
+                    },
+                    "vue-format.css.selector_separator_newline": {
+                        "order": 12,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "选择分隔新线"
+                    },
+                    "vue-format.css.newline_between_rules": {
+                        "order": 13,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "规则之间的新行"
+                    },
+                    "vue-format.css.space_around_selector_separator": {
+                        "order": 14,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "选择分隔符周围的空格"
+                    },
+                    "vue-format.css.space_around_combinator": {
+                        "order": 15,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "周围的空间组合子"
+                    }
+                }
+            },
+            {
+                "title": "javascript",
+                "order": 3,
+                "type": "object",
+                "properties": {
+                    "vue-format.javascript.disabled": {
+                        "order": 1,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "禁用 vue-format javascript"
+                    },
+                    "vue-format.javascript.indent_size": {
+                        "order": 2,
+                        "type": "number",
+                        "default": 4,
+                        "description": "缩进大小"
+                    },
+                    "vue-format.javascript.indent_char": {
+                        "order": 3,
+                        "type": "string",
+                        "default": " ",
+                        "description": "缩进字符"
+                    },
+                    "vue-format.javascript.indent_level": {
+                        "order": 4,
+                        "type": "number",
+                        "default": 0,
+                        "description": "缩进等级"
+                    },
+                    "vue-format.javascript.eol": {
+                        "order": 5,
+                        "type": "string",
+                        "default": "auto",
+                        "enum": [ "\n", "\r\n", "auto" ],
+                        "description": "默认行尾字符"
+                    },
+                    "vue-format.javascript.end_with_newline": {
+                        "order": 6,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "末尾插入新行"
+                    },
+                    "vue-format.javascript.preserve_newlines": {
+                        "order": 7,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "保存新行, 保存行距"
+                    },
+                    "vue-format.javascript.max_preserve_newlines": {
+                        "order": 8,
+                        "type": "number",
+                        "default": 4,
+                        "description": "保存2个行距"
+                    },
+                    "vue-format.javascript.indent_with_tabs": {
+                        "order": 9,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "缩进时使用制表符"
+                    },
+                    "vue-format.javascript.wrap_line_length": {
+                        "order": 10,
+                        "type": "number",
+                        "default": 160,
+                        "description": "换行线长度"
+                    },
+                    "vue-format.javascript.indent_empty_lines": {
+                        "order": 11,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "保持空行的缩进"
+                    },
+                    "vue-format.javascript.brace_style": {
+                        "order": 12,
+                        "type": "string",
+                        "default": "preserve-inline",
+                        "enum": [ "collapse", "expand", "end-expand", "none", "preserve-inline" ],
+                        "description": "括号风格"
+                    },
+                    "vue-format.javascript.unindent_chained_methods": {
+                        "order": 13,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "取消缩进链式方法"
+                    },
+                    "vue-format.javascript.break_chained_methods": {
+                        "order": 14,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "中断链式方法"
+                    },
+                    "vue-format.javascript.space_in_paren": {
+                        "order": 15,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "括号中空格"
+                    },
+                    "vue-format.javascript.space_in_empty_paren": {
+                        "order": 16,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "空括号中的空格"
+                    },
+                    "vue-format.javascript.jslint_happy": {
+                        "order": 17,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "使用满意的jslint格式调整"
+                    },
+                    "vue-format.javascript.space_after_anon_function": {
+                        "order": 18,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "匿名函数后的空格"
+                    },
+                    "vue-format.javascript.space_after_named_function": {
+                        "order": 19,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "命名函数后的括号"
+                    },
+                    "vue-format.javascript.keep_array_indentation": {
+                        "order": 20,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "保持数组缩进"
+                    },
+                    "vue-format.javascript.space_before_conditional": {
+                        "order": 21,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "条件语句前的空格"
+                    },
+                    "vue-format.javascript.unescape_strings": {
+                        "order": 22,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "不可转义的可打印字符编码为\\xNN或\\uNNNN"
+                    },
+                    "vue-format.javascript.e4x": {
+                        "order": 23,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "支持 e4x / jsx 语法"
+                    },
+                    "vue-format.javascript.comma_first": {
+                        "order": 24,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "使用逗号优先列表样式"
+                    },
+                    "vue-format.javascript.operator_position": {
+                        "order": 25,
+                        "type": "string",
+                        "enum": [ "before-newline", "after-newline", "preserve-newline" ],
+                        "default": "after-newline",
+                        "description": "操作符的位置"
+                    }
+                }
+            },
+            {
+                "title": "typescript",
+                "order": 3,
+                "type": "object",
+                "properties": {
+                    "vue-format.typescript.disabled": {
+                        "order": 1,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "禁用 vue-format typescript"
+                    },
+                    "vue-format.typescript.indent_size": {
+                        "order": 2,
+                        "type": "number",
+                        "default": 4,
+                        "description": "缩进大小"
+                    },
+                    "vue-format.typescript.indent_char": {
+                        "order": 3,
+                        "type": "string",
+                        "default": " ",
+                        "description": "缩进字符"
+                    },
+                    "vue-format.typescript.indent_level": {
+                        "order": 4,
+                        "type": "number",
+                        "default": 0,
+                        "description": "缩进等级"
+                    },
+                    "vue-format.typescript.eol": {
+                        "order": 5,
+                        "type": "string",
+                        "default": "auto",
+                        "enum": [ "\n", "\r\n", "auto" ],
+                        "description": "默认行尾字符"
+                    },
+                    "vue-format.typescript.end_with_newline": {
+                        "order": 6,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "末尾插入新行"
+                    },
+                    "vue-format.typescript.preserve_newlines": {
+                        "order": 7,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "保存新行, 保存行距"
+                    },
+                    "vue-format.typescript.max_preserve_newlines": {
+                        "order": 8,
+                        "type": "number",
+                        "default": 4,
+                        "description": "保存2个行距"
+                    },
+                    "vue-format.typescript.indent_with_tabs": {
+                        "order": 9,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "缩进时使用制表符"
+                    },
+                    "vue-format.typescript.wrap_line_length": {
+                        "order": 10,
+                        "type": "number",
+                        "default": 160,
+                        "description": "换行线长度"
+                    },
+                    "vue-format.typescript.indent_empty_lines": {
+                        "order": 11,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "保持空行的缩进"
+                    },
+                    "vue-format.typescript.brace_style": {
+                        "order": 12,
+                        "type": "string",
+                        "default": "preserve-inline",
+                        "enum": [ "collapse", "expand", "end-expand", "none", "preserve-inline" ],
+                        "description": "括号风格"
+                    },
+                    "vue-format.typescript.unindent_chained_methods": {
+                        "order": 13,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "取消缩进链式方法"
+                    },
+                    "vue-format.typescript.break_chained_methods": {
+                        "order": 14,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "中断链式方法"
+                    },
+                    "vue-format.typescript.space_in_paren": {
+                        "order": 15,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "括号中空格"
+                    },
+                    "vue-format.typescript.space_in_empty_paren": {
+                        "order": 16,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "空括号中的空格"
+                    },
+                    "vue-format.typescript.jslint_happy": {
+                        "order": 17,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "使用满意的jslint格式调整"
+                    },
+                    "vue-format.typescript.space_after_anon_function": {
+                        "order": 18,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "匿名函数后的空格"
+                    },
+                    "vue-format.typescript.space_after_named_function": {
+                        "order": 19,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "命名函数后的括号"
+                    },
+                    "vue-format.typescript.keep_array_indentation": {
+                        "order": 20,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "保持数组缩进"
+                    },
+                    "vue-format.typescript.space_before_conditional": {
+                        "order": 21,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "条件语句前的空格"
+                    },
+                    "vue-format.typescript.unescape_strings": {
+                        "order": 22,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "不可转义的可打印字符编码为\\xNN或\\uNNNN"
+                    },
+                    "vue-format.typescript.e4x": {
+                        "order": 23,
+                        "type": "boolean",
+                        "default": true,
+                        "description": "支持 e4x / jsx 语法"
+                    },
+                    "vue-format.typescript.comma_first": {
+                        "order": 24,
+                        "type": "boolean",
+                        "default": false,
+                        "description": "使用逗号优先列表样式"
+                    },
+                    "vue-format.typescript.operator_position": {
+                        "order": 25,
+                        "type": "string",
+                        "enum": [ "before-newline", "after-newline", "preserve-newline" ],
+                        "default": "after-newline",
+                        "description": "操作符的位置"
                     }
                 }
             }
-        },
+        ],
         "commands": [
             {
                 "when": "editorLangId == vue",
@@ -175,7 +612,7 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "npm run build",
+        "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile && npm run lint",
